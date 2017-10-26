@@ -3,7 +3,8 @@ This module contains only the class for the major Petrov
 """
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-from .character.character import Character
+
+from Character import Character
 
 class Petrov(Character):
     """
