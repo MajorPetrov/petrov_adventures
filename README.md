@@ -41,5 +41,5 @@ This project is licensed under the GNU General Public License - see the [LICENSE
 
 ## Acknowledgments
 
-* I hate the cosmopolitism, so i've got this idea
+* I hate cosmopolitism, so i've got this idea
 * I love video-games, this is my third project
