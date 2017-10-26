@@ -1,3 +1,6 @@
+"""
+This module contains only the class for characters
+"""
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 

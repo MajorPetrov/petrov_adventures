@@ -4,7 +4,7 @@ This module contains only the class for the major Petrov
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from Character import Character
+from .Character import Character
 
 class Petrov(Character):
     """
@@ -17,3 +17,10 @@ class Petrov(Character):
 
     def __del__(self):
         print("Game Over")
+
+    def attack(self, character):
+        """
+        Takes a character (class Character) by parameter and remove life
+        from him equivalent to the petrov's power_points
+        """
+        character.life_points -= self.power_points
