@@ -13,10 +13,15 @@ Game options and setting
 
 """
 
+# game options / settings
 TITLE = "Major Petrov"
 WIDTH = 480
 HEIGHT = 640
 FPS = 60
+
+# player properties
+PLAYER_ACC = 0.5
+PLAYER_FRICTION = -0.12
 
 # define colors
 WHITE = (255, 255, 255)
