@@ -1,6 +1,6 @@
 # The major Petrov against cosmopolitans
 
-A platform game based on Python pygame module
+A platform game based on Python pygame module (yeah, it's a Super Mario clone)
 
 ## Getting Started
 
