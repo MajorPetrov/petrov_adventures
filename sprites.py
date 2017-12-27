@@ -16,6 +16,8 @@ Sprite classes for Petrov_against_cosmopolitans - platform game
 import pygame as pg
 from settings import *
 
+vec = pg.math.Vector2
+
 
 class Player(pg.sprite.Sprite):
     def __init__(self):
@@ -24,18 +26,21 @@ class Player(pg.sprite.Sprite):
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.vx = 0
-        self.vy = 0
+        self.pos = vec(WIDTH / 2, HEIGHT / 2)  # position vector
+        self.vel = vec(0, 0)  # velocity vector
+        self.acc = vec(0, 0)  # acceleration vector
 
     def update(self):
-        self.vx = 0
+        self.acc = vec(0, 0)
         keys = pg.key.get_pressed()
 
         if keys[pg.K_LEFT]:
-            self.vx = -5
+            self.acc.x = -0.5
 
         if keys[pg.K_RIGHT]:
-            self.vx = 5
+            self.acc.x = 0.5
 
-        self.rect.x += self.vx
-        self.rect.y += self.vy
+        self.vel += self.acc
+        self.pos += self.vel + 0.5 * self.acc
+
+        self.rect.center = self.pos
