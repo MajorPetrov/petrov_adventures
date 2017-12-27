@@ -35,12 +35,13 @@ class Player(pg.sprite.Sprite):
         keys = pg.key.get_pressed()
 
         if keys[pg.K_LEFT]:
-            self.acc.x = -0.5
+            self.acc.x = -PLAYER_ACC
 
         if keys[pg.K_RIGHT]:
-            self.acc.x = 0.5
+            self.acc.x = PLAYER_ACC
 
+        self.acc += self.vel * PLAYER_FRICTION
         self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
+        self.pos += self.vel + PLAYER_ACC * self.acc
 
         self.rect.center = self.pos
