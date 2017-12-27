@@ -17,6 +17,7 @@ Petrov_against_cosmopolitans - platform game
 
 import pygame as pg
 from settings import *
+from sprites import *
 
 
 class Game:
@@ -39,6 +40,8 @@ class Game:
         :return: None
         """
         self.all_sprites = pg.sprite.Group()
+        self.player = Player()
+        self.all_sprites.add(self.player)
         g.run()
 
     def run(self):
