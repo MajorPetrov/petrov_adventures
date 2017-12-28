@@ -12,7 +12,7 @@ To contribute to this project, or just to play the game, you need to install Pyt
 
 ### Installing
 
-To download the latest version of Python, you can to the official website:
+To download the latest version of Python, you can go to the official website:
 
 [Python](https://www.python.org/)
 
