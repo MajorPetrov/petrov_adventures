@@ -72,12 +72,26 @@ class Game:
         self.all_sprites.update()
 
         # check if the player hits a platform - only if falling
-        if self.player.vel.y:
+        if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
 
             if hits:
                 self.player.pos.y = hits[0].rect.top + 2
                 self.player.vel.y = 0
+
+        # if player reaches top 1/4 of screen
+        if self.player.rect.top <= HEIGHT / 4:
+            self.player.pos.y += abs(self.player.vel.y)  # velocity is negative when jumping
+
+            # taking all platforms
+            for platform in self.platforms:
+                platform.rect.y += abs(self.player.vel.y)  # platform will move in the same time as the player
+
+        if self.player.rect.bottom >= HEIGHT * 3 / 4:
+            self.player.pos.y -= self.player.vel.y
+
+            for platform in self.platforms:
+                platform.rect.y -= self.player.vel.y
 
     def events(self):
         """
