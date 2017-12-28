@@ -45,13 +45,10 @@ class Game:
         self.player = Player(self)  # parameter self make a link between the game itself and the player
         self.all_sprites.add(self.player)
 
-        p1 = Platform(0, HEIGHT - 40, WIDTH, 40)
-        self.all_sprites.add(p1)
-        self.platforms.add(p1)
-
-        p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20)
-        self.all_sprites.add(p2)
-        self.platforms.add(p2)
+        for platform in PLATFORM_LIST:
+            p = Platform(*platform)  # same as platform[0], platform[1], platform[2], platform[3]
+            self.all_sprites.add(p)
+            self.platforms.add(p)
 
         self.run()
 
@@ -73,11 +70,14 @@ class Game:
         :return: None
         """
         self.all_sprites.update()
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
 
-        if hits:
-            self.player.pos.y = hits[0].rect.top + 2
-            self.player.vel.y = 0
+        # check if the player hits a platform - only if falling
+        if self.player.vel.y:
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+
+            if hits:
+                self.player.pos.y = hits[0].rect.top + 2
+                self.player.vel.y = 0
 
     def events(self):
         """
