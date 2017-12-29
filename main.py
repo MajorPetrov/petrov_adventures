@@ -49,20 +49,18 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
 
-        self.player = Player(self, 10, 10)  # parameter self make a link between the game itself and the player
-        self.all_sprites.add(self.player)
-
-        # for platform in PLATFORM_LIST:
-        #     p = Platform(*platform)  # same as platform[0], platform[1], platform[2], platform[3]
-        #     self.all_sprites.add(p)
-        #     self.platforms.add(p)
-
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == "1":
                     p = Platform(col, row)
                     self.all_sprites.add(p)
                     self.platforms.add(p)
+
+                elif tile == "p":
+                    self.player = Player(self, col, row)  # parameter self make a link between the game and the player
+                    self.all_sprites.add(self.player)
+
+        self.camera = Camera(self.map.width, self.map.height)
 
         self.run()
 
@@ -86,28 +84,7 @@ class Game:
         :return: None
         """
         self.all_sprites.update()
-
-        # check if the player hits a platform - only if falling
-        if self.player.vel.y > 0:
-            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-
-            if hits:
-                self.player.pos.y = hits[0].rect.top + 2
-                self.player.vel.y = 0
-
-        # if player reaches top 1/4 of screen
-        if self.player.rect.top <= HEIGHT / 4:
-            self.player.pos.y += abs(self.player.vel.y)  # velocity is negative when jumping
-
-            # taking all platforms
-            for platform in self.platforms:
-                platform.rect.y += abs(self.player.vel.y)  # platform will move in the same time as the player
-
-        if self.player.rect.bottom >= HEIGHT * 3 / 4:
-            self.player.pos.y -= self.player.vel.y
-
-            for platform in self.platforms:
-                platform.rect.y -= self.player.vel.y
+        self.camera.update(self.player)
 
     def events(self):
         """
@@ -133,7 +110,9 @@ class Game:
         :return: None
         """
         self.screen.fill(BLACK)
-        self.all_sprites.draw(self.screen)
+
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
 
         # after drawing everything, flip the display
         pg.display.flip()
