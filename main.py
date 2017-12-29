@@ -15,8 +15,8 @@ Petrov_against_cosmopolitans - platform game
 
 """
 
-import pygame as pg
-from settings import *
+from os import path
+from map import *
 from sprites import *
 
 
@@ -35,20 +35,34 @@ class Game:
         self.running = True
         self.playing = True
 
+    def load_data(self):
+        folder = path.dirname(__file__)
+        self.map = Map(path.join(folder, "level_1"))
+
     def new(self):
         """
         Start a new game
         :return: None
         """
+        self.load_data()
+
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
-        self.player = Player(self)  # parameter self make a link between the game itself and the player
+
+        self.player = Player(self, 10, 10)  # parameter self make a link between the game itself and the player
         self.all_sprites.add(self.player)
 
-        for platform in PLATFORM_LIST:
-            p = Platform(*platform)  # same as platform[0], platform[1], platform[2], platform[3]
-            self.all_sprites.add(p)
-            self.platforms.add(p)
+        # for platform in PLATFORM_LIST:
+        #     p = Platform(*platform)  # same as platform[0], platform[1], platform[2], platform[3]
+        #     self.all_sprites.add(p)
+        #     self.platforms.add(p)
+
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == "1":
+                    p = Platform(col, row)
+                    self.all_sprites.add(p)
+                    self.platforms.add(p)
 
         self.run()
 
@@ -58,8 +72,10 @@ class Game:
         :return: None
         """
         while self.playing:
+
             # keep loop running at the right speed
             self.clock.tick(FPS)
+
             self.events()
             self.update()
             self.draw()
@@ -99,6 +115,7 @@ class Game:
         :return: None
         """
         for event in pg.event.get():
+
             # check for closing window
             if event.type == pg.QUIT:
                 if self.playing:
