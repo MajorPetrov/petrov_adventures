@@ -9,15 +9,20 @@
 :date: 2017, december
 
 
-Game options and setting
+Game options and settings
+
+Petrov_against_cosmopolitans - platform game
 
 """
 
 # game options / settings
 TITLE = "Major Petrov"
-WIDTH = 480
-HEIGHT = 640
+WIDTH = 1024
+HEIGHT = 720
 FPS = 60
+TILE_SIZE = 32
+GRID_WIDTH = WIDTH / TILE_SIZE
+GRID_HEIGHT = HEIGHT / TILE_SIZE
 
 # player properties
 PLAYER_ACC = 0.5

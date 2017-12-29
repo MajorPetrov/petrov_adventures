@@ -9,7 +9,9 @@
 :date: 2017, december
 
 
-Sprite classes for Petrov_against_cosmopolitans - platform game
+Sprite classes for the game
+
+Petrov_against_cosmopolitans - platform game
 
 """
 
@@ -20,7 +22,7 @@ vec = pg.math.Vector2
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
 
         self.game = game
@@ -31,7 +33,7 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
 
-        self.pos = vec(WIDTH / 2, HEIGHT / 2)  # position vector
+        self.pos = vec(x, y)  # position vector
         self.vel = vec(0, 0)  # velocity vector
         self.acc = vec(0, 0)  # acceleration vector
 
@@ -72,11 +74,11 @@ class Player(pg.sprite.Sprite):
 
 
 class Platform(pg.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
+        self.image = pg.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(GREEN)
 
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
