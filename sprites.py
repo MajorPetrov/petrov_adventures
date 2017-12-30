@@ -38,9 +38,8 @@ class Player(pg.sprite.Sprite):
         self.acc = vec(0, 0)  # acceleration vector
 
     def update(self):
-        self.collision()
-
         self.acc = vec(0, PLAYER_GRAV)  # gravity acceleration
+
         keys = pg.key.get_pressed()
 
         if keys[pg.K_LEFT]:
@@ -56,32 +55,7 @@ class Player(pg.sprite.Sprite):
         self.vel += self.acc
         self.pos += self.vel + PLAYER_ACC * self.acc
 
-        # wrap around the sides of the screen
-        # if self.pos.x > WIDTH:
-        #     self.pos.x = 0
-        #
-        # if self.pos.x < 0:
-        #     self.pos.x = WIDTH
-
         self.rect.midbottom = self.pos
-
-    def collision(self):
-        # for wall in self.game.all_sprites:
-        #     if wall.left == self.rect.right:
-        #         self.acc = vec(0, 0)
-        #         self.vel = vec(0, 0)
-        #
-        #     elif wall.right == self.rect.left:
-        #         self.acc = vec(0, 0)
-        #         self.vel = vec(0, 0)
-
-        # check if the player hits a platform - only if falling
-        if self.vel.y > 0:
-            hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-
-            if hits:
-                self.pos.y = hits[0].rect.top + 2
-                self.vel.y = 0
 
     def jump(self):
         # the player can jump only if he's standing on a platform
