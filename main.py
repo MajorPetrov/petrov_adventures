@@ -86,6 +86,33 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
+        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+
+        print(self.player.vel.y)
+
+        for platform in hits:
+            if self.player.rect.colliderect(platform.rect):
+                if self.player.vel.x > 0:  # moving right - hit the left side of the wall
+                    # self.player.pos.x = platform.rect.right + 1
+                    self.player.vel.x = 0
+
+                elif self.player.vel.x < 0:  # moving left - hit the right side of the wall
+                    # self.player.pos.x = platform.rect.left - 1
+                    self.player.vel.x = 0
+
+                elif self.player.vel.y > 0:  # moving down - hit the top side of the wall
+                    self.player.pos.y = platform.rect.top + 1
+                    self.player.vel.y = 0
+                    self.player.vel.y = 0
+                    self.player.vel.y = 0
+                    self.player.vel.y = 0
+                    self.player.vel.y = 0
+                    self.player.vel.y = 0
+
+                elif self.player.vel.y < 0:  # moving up - hit the bottom side of the wall
+                    # self.player.pos.y = platform.rect.bottom - 1
+                    self.player.vel.y = 0
+
     def events(self):
         """
         Game loop - Process input (events)
