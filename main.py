@@ -86,33 +86,6 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-
-        print(self.player.vel.y)
-
-        for platform in hits:
-            if self.player.rect.colliderect(platform.rect):
-                if self.player.vel.x > 0:  # moving right - hit the left side of the wall
-                    # self.player.pos.x = platform.rect.right + 1
-                    self.player.vel.x = 0
-
-                elif self.player.vel.x < 0:  # moving left - hit the right side of the wall
-                    # self.player.pos.x = platform.rect.left - 1
-                    self.player.vel.x = 0
-
-                elif self.player.vel.y > 0:  # moving down - hit the top side of the wall
-                    self.player.pos.y = platform.rect.top + 1
-                    self.player.vel.y = 0
-                    self.player.vel.y = 0
-                    self.player.vel.y = 0
-                    self.player.vel.y = 0
-                    self.player.vel.y = 0
-                    self.player.vel.y = 0
-
-                elif self.player.vel.y < 0:  # moving up - hit the bottom side of the wall
-                    # self.player.pos.y = platform.rect.bottom - 1
-                    self.player.vel.y = 0
-
     def events(self):
         """
         Game loop - Process input (events)
@@ -127,9 +100,19 @@ class Game:
 
                 self.running = False
 
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.player.go_left()
+                if event.key == pygame.K_RIGHT:
+                    self.player.go_right()
+                if event.key == pygame.K_SPACE:
                     self.player.jump()
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT and self.player.change_x < 0:
+                    self.player.stop()
+                if event.key == pygame.K_RIGHT and self.player.change_x > 0:
+                    self.player.stop()
 
     def draw(self):
         """

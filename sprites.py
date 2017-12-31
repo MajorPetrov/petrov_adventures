@@ -15,62 +15,110 @@ Petrov_against_cosmopolitans - platform game
 
 """
 
-import pygame as pg
+import pygame
 from settings import *
 
-vec = pg.math.Vector2
 
-
-class Player(pg.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
-        pg.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
         self.game = game
 
-        self.image = pg.Surface((TILE_SIZE, TILE_SIZE))
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(YELLOW)
 
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
 
-        self.pos = vec(x * TILE_SIZE, y * TILE_SIZE)  # position vector
-        self.vel = vec(0, 0)  # velocity vector
-        self.acc = vec(0, 0)  # acceleration vector
+        # Set speed vector of player
+        self.change_x = 0
+        self.change_y = 0
 
     def update(self):
-        self.acc = vec(0, PLAYER_GRAV)  # gravity acceleration
+        # Gravity
+        self.calc_grav()
 
-        keys = pg.key.get_pressed()
+        # left / right movement treatment ------------------------------------------------------------------------------
 
-        if keys[pg.K_LEFT]:
-            self.acc.x = -PLAYER_ACC
+        # Move left/right
+        self.rect.x += self.change_x
 
-        if keys[pg.K_RIGHT]:
-            self.acc.x = PLAYER_ACC
+        # See if we hit anything
+        block_hit_list = pygame.sprite.spritecollide(self, self.game.platforms, False)
 
-        # apply friction
-        self.acc.x += self.vel.x * PLAYER_FRICTION
+        for block in block_hit_list:
+            # If we are moving right, set our right side to the left side of the item we hit
+            if self.change_x > 0:
+                self.rect.right = block.rect.left
 
-        # equations of motion
-        self.vel += self.acc
-        self.pos += self.vel + PLAYER_ACC * self.acc
+            # Otherwise if we are moving left, do the opposite.
+            elif self.change_x < 0:
+                self.rect.left = block.rect.right
 
-        self.rect.midbottom = self.pos
+        # up / down movement treatment ---------------------------------------------------------------------------------
+
+        # Move up/down
+        self.rect.y += self.change_y
+
+        # Check and see if we hit anything
+        block_hit_list = pygame.sprite.spritecollide(self, self.game.platforms, False)
+
+        for block in block_hit_list:
+
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+
+            elif self.change_y < 0:
+                self.rect.top = block.rect.bottom
+
+            # Stop our vertical movement
+            self.change_y = 0
+
+    def calc_grav(self):
+        if self.change_y == 0:
+            self.change_y = 1
+        else:
+            self.change_y += .35
+
+        # See if we are on the ground.
+        # if self.rect.y >= HEIGHT - self.rect.height and self.change_y >= 0:
+        #     self.change_y = 0
+        #     self.rect.y = HEIGHT - self.rect.height
 
     def jump(self):
-        # the player can jump only if he's standing on a platform
-        self.rect.x += 1
-        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-        self.rect.x -= 1
+        # Called when user hits "jump" button.
 
-        if hits:
-            self.vel.y = -15
+        # move down a bit and see if there is a platform below us.
+        # Move down 2 pixels because it doesn't work well if we only move down
+        # 1 when working with a platform moving down.
+        self.rect.y += 2
+        platform_hit_list = pygame.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.y -= 2
+
+        # If it is ok to jump, set our speed upwards
+        if len(platform_hit_list) > 0 or self.rect.bottom >= HEIGHT:
+            self.change_y = -10
+
+    def go_left(self):
+        # Called when the user hits the left arrow.
+        self.change_x = -5
+
+    def go_right(self):
+        # Called when the user hits the right arrow
+        self.change_x = 5
+
+    def stop(self):
+        # Called when the user lets off the keyboard.
+        self.change_x = 0
 
 
-class Platform(pg.sprite.Sprite):
+class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((TILE_SIZE, TILE_SIZE))
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(GREEN)
 
         self.rect = self.image.get_rect()
