@@ -81,7 +81,7 @@ class Player(pygame.sprite.Sprite):
         if self.change_y == 0:
             self.change_y = 1
         else:
-            self.change_y += .35
+            self.change_y += PLAYER_GRAV
 
         # See if we are on the ground.
         # if self.rect.y >= HEIGHT - self.rect.height and self.change_y >= 0:
@@ -99,8 +99,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= 2
 
         # If it is ok to jump, set our speed upwards
-        if len(platform_hit_list) > 0 or self.rect.bottom >= HEIGHT:
-            self.change_y = -10
+        if len(platform_hit_list) > 0:
+            self.change_y = PLAYER_JUMP
 
     def go_left(self):
         # Called when the user hits the left arrow.

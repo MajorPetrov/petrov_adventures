@@ -26,14 +26,14 @@ class Game:
         Initialize game window
         """
         # initialize pygame and create window
-        pg.init()
-        pg.mixer.init()
-        pg.display.set_caption(TITLE)
+        pygame.init()
+        pygame.mixer.init()
+        pygame.display.set_caption(TITLE)
 
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        self.clock = pg.time.Clock()
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.font_name = pygame.font.match_font(FONT_NAME)
         self.running = True
-        self.playing = True
 
     def load_data(self):
         folder = path.dirname(__file__)
@@ -46,8 +46,8 @@ class Game:
         """
         self.load_data()
 
-        self.all_sprites = pg.sprite.Group()
-        self.platforms = pg.sprite.Group()
+        self.all_sprites = pygame.sprite.Group()
+        self.platforms = pygame.sprite.Group()
 
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
@@ -69,11 +69,10 @@ class Game:
         Game loop
         :return: None
         """
+        self.playing = True
+
         while self.playing:
-
-            # keep loop running at the right speed
-            self.clock.tick(FPS)
-
+            self.clock.tick(FPS)  # keep loop running at the right speed
             self.events()
             self.update()
             self.draw()
@@ -86,15 +85,21 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
 
+        print(self.player.rect.bottom)
+
+        # dying
+        if self.player.rect.bottom > HEIGHT:
+            self.playing = False
+
     def events(self):
         """
         Game loop - Process input (events)
         :return: None
         """
-        for event in pg.event.get():
+        for event in pygame.event.get():
 
             # check for closing window
-            if event.type == pg.QUIT:
+            if event.type == pygame.QUIT:
                 if self.playing:
                     self.playing = False
 
@@ -125,7 +130,7 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
 
         # after drawing everything, flip the display
-        pg.display.flip()
+        pygame.display.flip()
 
     def show_start_screen(self):
         """
@@ -141,6 +146,12 @@ class Game:
         """
         pass
 
+    def draw_text(self, text, size, color, x, y):
+        font = pygame.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
 g = Game()
 g.show_start_screen()
@@ -149,4 +160,4 @@ while g.running:
     g.new()
     g.show_go_screen()
 
-pg.quit()
+pygame.quit()
