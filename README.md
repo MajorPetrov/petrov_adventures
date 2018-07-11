@@ -1,4 +1,4 @@
-# The major Petrov against cosmopolitans
+# The major Petrov adventure
 [![Collaborator](https://img.shields.io/badge/%E2%99%A5-collaborator-ff0068.svg
 )](https://github.com/akinariobi)
 [![Python](https://img.shields.io/badge/download-Python%203.6.4-blue.svg
@@ -49,5 +49,4 @@ This project is licensed under the GNU General Public License - see the [LICENSE
 
 ## Acknowledgments
 
-* I hate cosmopolitism, so i've got this idea
 * I love video-games, this is my third project
